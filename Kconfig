@@ -1,0 +1,5 @@
+config ZMK_BEHAVIOR_INERTIA
+    bool
+    default y
+    depends on DT_HAS_ZMK_BEHAVIOR_INERTIA_ENABLED
+    select ZMK_POINTING
