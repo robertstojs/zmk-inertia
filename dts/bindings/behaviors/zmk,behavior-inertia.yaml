@@ -1,0 +1,44 @@
+description: Mouse movement with acceleration and glide.
+
+compatible: "zmk,behavior-inertia"
+
+include: zero_param.yaml
+
+properties:
+  x-direction:
+    type: int
+    default: 0
+
+  y-direction:
+    type: int
+    default: 0
+
+  delay-ms:
+    type: int
+    default: 150
+    description: Time after key press before acceleration begins
+
+  interval-ms:
+    type: int
+    default: 16
+    description: Time between cursor updates. Lower = smoother movement.
+
+  max-speed:
+    type: int
+    default: 16
+    description: Maximum pixels moved per update
+
+  time-to-max:
+    type: int
+    default: 32
+    description: Number of updates to reach max speed. Higher = slower ramp up.
+
+  friction:
+    type: int
+    default: 24
+    description: How fast cursor stops after release (0-255). Higher = quicker stop.
+
+  move-delta:
+    type: int
+    default: 1
+    description: Pixels moved immediately on key press
