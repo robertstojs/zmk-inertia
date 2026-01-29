@@ -55,4 +55,22 @@ static struct {
     .move_delta = 1,
 };
 
+static int8_t calc_velocity(int8_t direction, int8_t velocity) {
+    // Friction
+    if ((direction > -1) && (velocity < 0)) {
+        velocity = (int16_t)(velocity + 1) * (256 - state.friction) / 256;
+    } else if ((direction < 1) && (velocity > 0)) {
+        velocity = (int16_t)velocity * (256 - state.friction) / 256;
+    }
+
+    // Acceleration
+    if ((direction > 0) && (velocity < state.time_to_max)) {
+        velocity++;
+    } else if ((direction < 0) && (velocity > -state.time_to_max)) {
+        velocity--;
+    }
+
+    return velocity;
+}
+
 #endif
