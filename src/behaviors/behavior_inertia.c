@@ -73,4 +73,37 @@ static int8_t calc_velocity(int8_t direction, int8_t velocity) {
     return velocity;
 }
 
+static int8_t calc_movement(int8_t direction, int8_t velocity) {
+    int16_t unit;
+
+    if (state.frame == 0) {
+        unit = direction * state.move_delta;
+    } else {
+        // Quadratic acceleration curve
+        int32_t percent = ((int32_t)velocity << 8) / state.time_to_max;
+        percent = (percent * percent) >> 8;
+        if (velocity < 0) {
+            percent = -percent;
+        }
+
+        if (velocity > 0) {
+            unit = 1;
+        } else if (velocity < 0) {
+            unit = -1;
+        } else {
+            unit = 0;
+        }
+
+        unit = unit + ((state.max_speed * percent) >> 8);
+    }
+
+    if (unit > MOVE_MAX) {
+        unit = MOVE_MAX;
+    } else if (unit < -MOVE_MAX) {
+        unit = -MOVE_MAX;
+    }
+
+    return (int8_t)unit;
+}
+
 #endif
