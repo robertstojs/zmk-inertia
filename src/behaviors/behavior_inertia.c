@@ -106,4 +106,16 @@ static int8_t calc_movement(int8_t direction, int8_t velocity) {
     return (int8_t)unit;
 }
 
+static void send_mouse_report(int8_t x, int8_t y) {
+    if (x == 0 && y == 0) {
+        return;
+    }
+
+    LOG_DBG("Inertia move: x=%d y=%d", x, y);
+
+    zmk_hid_mouse_movement_set(x, y);
+    zmk_endpoints_send_mouse_report();
+    zmk_hid_mouse_movement_set(0, 0);
+}
+
 #endif
