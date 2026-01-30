@@ -118,4 +118,25 @@ static void send_mouse_report(int8_t x, int8_t y) {
     zmk_hid_mouse_movement_set(0, 0);
 }
 
+static void tick_work_handler(struct k_work *work) {
+    state.x_velocity = calc_velocity(state.x_dir, state.x_velocity);
+    state.y_velocity = calc_velocity(state.y_dir, state.y_velocity);
+
+    int8_t move_x = calc_movement(state.x_dir, state.x_velocity);
+    int8_t move_y = calc_movement(state.y_dir, state.y_velocity);
+
+    send_mouse_report(move_x, move_y);
+
+    state.frame++;
+
+    if (state.x_dir == 0 && state.y_dir == 0 &&
+        state.x_velocity == 0 && state.y_velocity == 0) {
+        state.frame = 0;
+        LOG_DBG("Inertia stopped");
+        return;
+    }
+
+    k_work_schedule(&state.tick_work, K_MSEC(state.interval_ms));
+}
+
 #endif
