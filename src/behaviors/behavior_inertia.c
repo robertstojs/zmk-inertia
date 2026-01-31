@@ -146,4 +146,45 @@ static int behavior_inertia_init_global(void) {
 
 SYS_INIT(behavior_inertia_init_global, APPLICATION, CONFIG_APPLICATION_INIT_PRIORITY);
 
+static int on_inertia_binding_pressed(struct zmk_behavior_binding *binding,
+                                       struct zmk_behavior_binding_event event) {
+    const struct device *dev = zmk_behavior_get_binding(binding->behavior_dev);
+    if (!dev) {
+        LOG_ERR("Unable to find inertia device");
+        return -ENODEV;
+    }
+
+    const struct behavior_inertia_config *cfg = dev->config;
+
+    state.delay_ms = cfg->delay_ms;
+    state.interval_ms = cfg->interval_ms;
+    state.max_speed = cfg->max_speed;
+    state.time_to_max = cfg->time_to_max;
+    state.friction = cfg->friction;
+    state.move_delta = cfg->move_delta;
+
+    if (cfg->y_direction != 0) {
+        state.y_dir = cfg->y_direction;
+    }
+    if (cfg->x_direction != 0) {
+        state.x_dir = cfg->x_direction;
+    }
+
+    LOG_DBG("Inertia pressed: x_dir=%d y_dir=%d", state.x_dir, state.y_dir);
+
+    // Send immediate movement on first press
+    if (state.frame == 0) {
+        int8_t move_x = calc_movement(state.x_dir, state.x_velocity);
+        int8_t move_y = calc_movement(state.y_dir, state.y_velocity);
+        send_mouse_report(move_x, move_y);
+    }
+
+    if (!k_work_delayable_is_pending(&state.tick_work)) {
+        uint32_t delay = (state.frame > 0) ? state.interval_ms : state.delay_ms;
+        k_work_schedule(&state.tick_work, K_MSEC(delay));
+    }
+
+    return ZMK_BEHAVIOR_OPAQUE;
+}
+
 #endif
