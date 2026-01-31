@@ -139,4 +139,11 @@ static void tick_work_handler(struct k_work *work) {
     k_work_schedule(&state.tick_work, K_MSEC(state.interval_ms));
 }
 
+static int behavior_inertia_init_global(void) {
+    k_work_init_delayable(&state.tick_work, tick_work_handler);
+    return 0;
+}
+
+SYS_INIT(behavior_inertia_init_global, APPLICATION, CONFIG_APPLICATION_INIT_PRIORITY);
+
 #endif
