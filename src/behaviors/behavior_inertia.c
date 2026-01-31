@@ -187,4 +187,27 @@ static int on_inertia_binding_pressed(struct zmk_behavior_binding *binding,
     return ZMK_BEHAVIOR_OPAQUE;
 }
 
+static int on_inertia_binding_released(struct zmk_behavior_binding *binding,
+                                        struct zmk_behavior_binding_event event) {
+    const struct device *dev = zmk_behavior_get_binding(binding->behavior_dev);
+    if (!dev) {
+        LOG_ERR("Unable to find inertia device");
+        return -ENODEV;
+    }
+
+    const struct behavior_inertia_config *cfg = dev->config;
+
+    LOG_DBG("Inertia released: x_dir=%d y_dir=%d", cfg->x_direction, cfg->y_direction);
+
+    // Clear direction if this key set it
+    if (cfg->y_direction != 0 && state.y_dir == cfg->y_direction) {
+        state.y_dir = 0;
+    }
+    if (cfg->x_direction != 0 && state.x_dir == cfg->x_direction) {
+        state.x_dir = 0;
+    }
+
+    return ZMK_BEHAVIOR_OPAQUE;
+}
+
 #endif
