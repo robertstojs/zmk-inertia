@@ -1,0 +1,31 @@
+/ {
+    behaviors {
+        /omit-if-no-ref/ mmi_up: mmi_up {
+            compatible = "zmk,behavior-inertia";
+            #binding-cells = <0>;
+            x-direction = <0>;
+            y-direction = <(-1)>;
+        };
+
+        /omit-if-no-ref/ mmi_down: mmi_down {
+            compatible = "zmk,behavior-inertia";
+            #binding-cells = <0>;
+            x-direction = <0>;
+            y-direction = <1>;
+        };
+
+        /omit-if-no-ref/ mmi_left: mmi_left {
+            compatible = "zmk,behavior-inertia";
+            #binding-cells = <0>;
+            x-direction = <(-1)>;
+            y-direction = <0>;
+        };
+
+        /omit-if-no-ref/ mmi_right: mmi_right {
+            compatible = "zmk,behavior-inertia";
+            #binding-cells = <0>;
+            x-direction = <1>;
+            y-direction = <0>;
+        };
+    };
+};
