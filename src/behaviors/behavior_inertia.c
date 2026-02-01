@@ -210,4 +210,31 @@ static int on_inertia_binding_released(struct zmk_behavior_binding *binding,
     return ZMK_BEHAVIOR_OPAQUE;
 }
 
+static const struct behavior_driver_api behavior_inertia_driver_api = {
+    .binding_pressed = on_inertia_binding_pressed,
+    .binding_released = on_inertia_binding_released,
+};
+
+static int behavior_inertia_init(const struct device *dev) {
+    return 0;
+}
+
+#define INERTIA_INST(n)                                                         \
+    static const struct behavior_inertia_config behavior_inertia_config_##n = { \
+        .x_direction = DT_INST_PROP(n, x_direction),                            \
+        .y_direction = DT_INST_PROP(n, y_direction),                            \
+        .delay_ms = DT_INST_PROP(n, delay_ms),                                  \
+        .interval_ms = DT_INST_PROP(n, interval_ms),                            \
+        .max_speed = DT_INST_PROP(n, max_speed),                                \
+        .time_to_max = DT_INST_PROP(n, time_to_max),                            \
+        .friction = DT_INST_PROP(n, friction),                                  \
+        .move_delta = DT_INST_PROP(n, move_delta),                              \
+    };                                                                          \
+    BEHAVIOR_DT_INST_DEFINE(n, behavior_inertia_init, NULL, NULL,               \
+                            &behavior_inertia_config_##n, POST_KERNEL,          \
+                            CONFIG_KERNEL_INIT_PRIORITY_DEFAULT,                \
+                            &behavior_inertia_driver_api);
+
+DT_INST_FOREACH_STATUS_OKAY(INERTIA_INST)
+
 #endif
