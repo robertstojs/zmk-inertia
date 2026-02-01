@@ -27,5 +27,33 @@
             x-direction = <1>;
             y-direction = <0>;
         };
+
+        /omit-if-no-ref/ mmi_up_left: mmi_up_left {
+            compatible = "zmk,behavior-inertia";
+            #binding-cells = <0>;
+            x-direction = <(-1)>;
+            y-direction = <(-1)>;
+        };
+
+        /omit-if-no-ref/ mmi_up_right: mmi_up_right {
+            compatible = "zmk,behavior-inertia";
+            #binding-cells = <0>;
+            x-direction = <1>;
+            y-direction = <(-1)>;
+        };
+
+        /omit-if-no-ref/ mmi_down_left: mmi_down_left {
+            compatible = "zmk,behavior-inertia";
+            #binding-cells = <0>;
+            x-direction = <(-1)>;
+            y-direction = <1>;
+        };
+
+        /omit-if-no-ref/ mmi_down_right: mmi_down_right {
+            compatible = "zmk,behavior-inertia";
+            #binding-cells = <0>;
+            x-direction = <1>;
+            y-direction = <1>;
+        };
     };
 };
