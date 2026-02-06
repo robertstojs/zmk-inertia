@@ -2,6 +2,8 @@
 
 Physics-based mouse cursor movement with smooth acceleration and glide effects for ZMK.
 
+https://github.com/zmkfirmware/zmk
+
 ## Installation
 
 Add to your `config/west.yml`:
