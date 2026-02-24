@@ -114,7 +114,7 @@ static void send_mouse_report(int8_t x, int8_t y) {
     LOG_DBG("Inertia move: x=%d y=%d", x, y);
 
     zmk_hid_mouse_movement_set(x, y);
-    zmk_endpoints_send_mouse_report();
+    zmk_endpoint_send_mouse_report();
     zmk_hid_mouse_movement_set(0, 0);
 }
 
